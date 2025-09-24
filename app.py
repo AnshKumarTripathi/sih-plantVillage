@@ -114,6 +114,33 @@ def display_prediction_results(results: Dict):
     primary = results["top_predictions"][0]
     confidence = results["confidence_metrics"]
     
+    # Check for validation warnings
+    validation_result = results.get("validation_result", {})
+    quality_metrics = results.get("quality_metrics", {})
+    
+    # Display validation warnings if image is not valid
+    if not validation_result.get("is_valid", True):
+        st.warning(f"⚠️ **Image Validation Warning**")
+        st.error(f"**Issue:** {validation_result.get('recommendation', 'Image may not be suitable for analysis')}")
+        st.info("💡 **Recommendations:**")
+        st.markdown("""
+        - Ensure the image shows a clear plant leaf
+        - Make sure the leaf is well-lit and in focus
+        - Avoid images of non-plant objects
+        - Try uploading a different image
+        """)
+        
+        # Show quality metrics
+        if quality_metrics:
+            st.metric("Prediction Quality", quality_metrics.get("quality_level", "Unknown"))
+            st.metric("Quality Score", f"{quality_metrics.get('quality_score', 0):.1f}/100")
+    
+    # Display quality warning for low-quality predictions
+    elif quality_metrics.get("quality_score", 100) < 40:
+        st.warning(f"⚠️ **Low Prediction Quality**")
+        st.info(f"Quality Score: {quality_metrics.get('quality_score', 0):.1f}/100 ({quality_metrics.get('quality_level', 'Unknown')})")
+        st.info("💡 Consider uploading a clearer image of a plant leaf for better results.")
+    
     # Main prediction card
     st.markdown(f"""
     <div class="prediction-card">
@@ -137,6 +164,37 @@ def display_prediction_results(results: Dict):
     
     with col3:
         st.metric("Confidence Range", f"{confidence['confidence_range']:.3f}")
+    
+    # Quality metrics section
+    if quality_metrics:
+        st.markdown("### 🎯 Prediction Quality")
+        quality_col1, quality_col2, quality_col3 = st.columns(3)
+        
+        with quality_col1:
+            st.metric("Quality Score", f"{quality_metrics.get('quality_score', 0):.1f}/100")
+        
+        with quality_col2:
+            st.metric("Quality Level", quality_metrics.get('quality_level', 'Unknown'))
+        
+        with quality_col3:
+            st.metric("High Quality", "✅ Yes" if quality_metrics.get('is_high_quality', False) else "❌ No")
+        
+        # Show detailed quality metrics
+        with st.expander("📈 Detailed Quality Metrics"):
+            st.write(f"**Max Confidence:** {quality_metrics.get('max_confidence', 0):.3f}")
+            st.write(f"**Mean Confidence:** {quality_metrics.get('mean_confidence', 0):.3f}")
+            st.write(f"**Confidence Std:** {quality_metrics.get('std_confidence', 0):.3f}")
+            st.write(f"**Entropy:** {quality_metrics.get('entropy', 0):.3f}")
+            
+            # Interpretation
+            if quality_metrics.get('quality_score', 0) >= 80:
+                st.success("🎉 Excellent prediction quality! The model is very confident in this result.")
+            elif quality_metrics.get('quality_score', 0) >= 60:
+                st.info("👍 Good prediction quality. The result is reliable.")
+            elif quality_metrics.get('quality_score', 0) >= 40:
+                st.warning("⚠️ Fair prediction quality. Consider uploading a clearer image.")
+            else:
+                st.error("❌ Poor prediction quality. The image may not be suitable for analysis.")
     
     # Confidence bar
     confidence_pct = primary['confidence_percentage']
@@ -237,6 +295,15 @@ def main():
             type=['jpg', 'jpeg', 'png'],
             help="Upload a clear image of a plant leaf for disease detection"
         )
+        
+        # Image requirements
+        st.info("""
+        📋 **Image Requirements:**
+        - **Plant leaves only** (not flowers, fruits, or stems)
+        - **Clear, well-lit images** with good contrast
+        - **Single leaf per image** for best results
+        - **Supported plants:** Apple, Blueberry, Cherry, Corn, Grape, Orange, Peach, Pepper, Potato, Raspberry, Soybean, Squash, Strawberry, Tomato
+        """)
         
         if uploaded_file is not None:
             # Display uploaded image

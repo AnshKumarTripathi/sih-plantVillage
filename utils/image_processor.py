@@ -165,6 +165,92 @@ def validate_image(image: Union[np.ndarray, Image.Image]) -> bool:
         logger.error(f"Error validating image: {str(e)}")
         return False
 
+def analyze_image_content(image: Union[np.ndarray, Image.Image]) -> Dict:
+    """
+    Analyze image content to determine if it's likely a plant leaf.
+    
+    Args:
+        image (Union[np.ndarray, Image.Image]): Input image
+        
+    Returns:
+        Dict: Analysis results with recommendations
+    """
+    try:
+        if isinstance(image, Image.Image):
+            image = np.array(image)
+        
+        # Basic image analysis
+        height, width = image.shape[:2]
+        aspect_ratio = width / height
+        
+        # Color analysis
+        if len(image.shape) == 3:
+            # Color image
+            mean_color = np.mean(image, axis=(0, 1))
+            color_std = np.std(image, axis=(0, 1))
+            
+            # Check if image is predominantly green (typical for plant leaves)
+            green_dominance = mean_color[1] > mean_color[0] and mean_color[1] > mean_color[2]
+            color_variance = np.mean(color_std)
+            
+            # Check for reasonable color distribution
+            has_good_color_distribution = color_variance > 20
+            
+        else:
+            # Grayscale image
+            mean_intensity = np.mean(image)
+            intensity_std = np.std(image)
+            green_dominance = False
+            has_good_color_distribution = intensity_std > 20
+        
+        # Size analysis
+        is_reasonable_size = 100 <= min(height, width) <= 2000
+        is_reasonable_aspect_ratio = 0.3 <= aspect_ratio <= 3.0
+        
+        # Overall assessment
+        is_likely_plant = (
+            is_reasonable_size and 
+            is_reasonable_aspect_ratio and 
+            has_good_color_distribution
+        )
+        
+        # Generate recommendations
+        recommendations = []
+        if not is_reasonable_size:
+            recommendations.append("Image size may be too small or too large")
+        if not is_reasonable_aspect_ratio:
+            recommendations.append("Image aspect ratio seems unusual for a leaf")
+        if not has_good_color_distribution:
+            recommendations.append("Image may be too dark or have poor contrast")
+        if not green_dominance and len(image.shape) == 3:
+            recommendations.append("Image doesn't appear to be predominantly green (typical for leaves)")
+        
+        if not recommendations:
+            recommendations.append("Image appears suitable for plant disease analysis")
+        
+        analysis_result = {
+            "is_likely_plant": is_likely_plant,
+            "height": height,
+            "width": width,
+            "aspect_ratio": aspect_ratio,
+            "green_dominance": green_dominance,
+            "has_good_color_distribution": has_good_color_distribution,
+            "is_reasonable_size": is_reasonable_size,
+            "is_reasonable_aspect_ratio": is_reasonable_aspect_ratio,
+            "recommendations": recommendations
+        }
+        
+        logger.info(f"Image content analysis: {analysis_result}")
+        return analysis_result
+        
+    except Exception as e:
+        logger.error(f"Error analyzing image content: {str(e)}")
+        return {
+            "is_likely_plant": False,
+            "error": str(e),
+            "recommendations": ["Error analyzing image"]
+        }
+
 def load_image_from_bytes(image_bytes: bytes) -> np.ndarray:
     """
     Load image from bytes (useful for Streamlit file uploads).

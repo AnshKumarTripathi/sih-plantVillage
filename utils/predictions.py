@@ -184,6 +184,129 @@ def is_healthy_prediction(predictions: np.ndarray, threshold: float = 0.5) -> bo
         logger.error(f"Error determining healthy prediction: {str(e)}")
         return False
 
+def is_valid_plant_image(predictions: np.ndarray, confidence_threshold: float = 0.3) -> Dict:
+    """
+    Determine if the input image is likely a valid plant image.
+    
+    Args:
+        predictions (np.ndarray): Model predictions
+        confidence_threshold (float): Minimum confidence for valid prediction
+        
+    Returns:
+        Dict: Validation results with confidence and recommendations
+    """
+    try:
+        pred_array = predictions[0]
+        
+        # Get top prediction confidence
+        top_confidence = float(np.max(pred_array))
+        
+        # Calculate confidence distribution
+        confidence_std = float(np.std(pred_array))
+        confidence_mean = float(np.mean(pred_array))
+        
+        # Check if prediction is reliable
+        is_reliable = top_confidence > confidence_threshold
+        
+        # Check confidence distribution (low std = uncertain predictions)
+        is_uncertain = confidence_std < 0.1  # Very low standard deviation indicates uncertainty
+        
+        # Determine if image is likely a plant
+        is_likely_plant = is_reliable and not is_uncertain
+        
+        # Get recommendations
+        if not is_likely_plant:
+            if top_confidence < 0.2:
+                recommendation = "Image may not contain a plant or is too unclear"
+            elif is_uncertain:
+                recommendation = "Image is unclear or not a plant leaf"
+            else:
+                recommendation = "Image quality may be too low for reliable prediction"
+        else:
+            recommendation = "Image appears to be a valid plant leaf"
+        
+        validation_result = {
+            "is_valid": is_likely_plant,
+            "confidence": top_confidence,
+            "confidence_std": confidence_std,
+            "confidence_mean": confidence_mean,
+            "is_reliable": is_reliable,
+            "is_uncertain": is_uncertain,
+            "recommendation": recommendation,
+            "threshold_used": confidence_threshold
+        }
+        
+        logger.info(f"Image validation: {validation_result}")
+        return validation_result
+        
+    except Exception as e:
+        logger.error(f"Error validating plant image: {str(e)}")
+        return {
+            "is_valid": False,
+            "confidence": 0.0,
+            "recommendation": "Error validating image",
+            "error": str(e)
+        }
+
+def get_prediction_quality_score(predictions: np.ndarray) -> Dict:
+    """
+    Calculate a quality score for the prediction based on confidence distribution.
+    
+    Args:
+        predictions (np.ndarray): Model predictions
+        
+    Returns:
+        Dict: Quality metrics and score
+    """
+    try:
+        pred_array = predictions[0]
+        
+        # Calculate various quality metrics
+        max_confidence = float(np.max(pred_array))
+        mean_confidence = float(np.mean(pred_array))
+        std_confidence = float(np.std(pred_array))
+        
+        # Calculate entropy (higher entropy = more uncertainty)
+        entropy = -np.sum(pred_array * np.log(pred_array + 1e-10))
+        
+        # Calculate quality score (0-100)
+        # Higher max confidence and lower entropy = better quality
+        quality_score = (max_confidence * 100) - (entropy * 10)
+        quality_score = max(0, min(100, quality_score))
+        
+        # Determine quality level
+        if quality_score >= 80:
+            quality_level = "Excellent"
+        elif quality_score >= 60:
+            quality_level = "Good"
+        elif quality_score >= 40:
+            quality_level = "Fair"
+        elif quality_score >= 20:
+            quality_level = "Poor"
+        else:
+            quality_level = "Very Poor"
+        
+        quality_metrics = {
+            "quality_score": quality_score,
+            "quality_level": quality_level,
+            "max_confidence": max_confidence,
+            "mean_confidence": mean_confidence,
+            "std_confidence": std_confidence,
+            "entropy": entropy,
+            "is_high_quality": quality_score >= 60
+        }
+        
+        logger.info(f"Prediction quality: {quality_metrics}")
+        return quality_metrics
+        
+    except Exception as e:
+        logger.error(f"Error calculating quality score: {str(e)}")
+        return {
+            "quality_score": 0,
+            "quality_level": "Error",
+            "error": str(e)
+        }
+
 def get_disease_severity(predictions: np.ndarray) -> str:
     """
     Determine disease severity based on prediction confidence.
@@ -275,6 +398,12 @@ def predict_disease_cached(model, preprocessed_image: np.ndarray) -> Dict:
         # Get confidence analysis
         confidence_metrics = get_prediction_confidence(predictions)
         
+        # Validate if image is likely a plant
+        validation_result = is_valid_plant_image(predictions)
+        
+        # Get prediction quality score
+        quality_metrics = get_prediction_quality_score(predictions)
+        
         # Determine if healthy
         is_healthy = is_healthy_prediction(predictions)
         
@@ -290,6 +419,8 @@ def predict_disease_cached(model, preprocessed_image: np.ndarray) -> Dict:
             "predictions": predictions,
             "top_predictions": top_predictions,
             "confidence_metrics": confidence_metrics,
+            "validation_result": validation_result,
+            "quality_metrics": quality_metrics,
             "is_healthy": is_healthy,
             "severity": severity,
             "alternatives": alternatives,
