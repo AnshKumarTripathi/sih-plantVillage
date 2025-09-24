@@ -226,7 +226,7 @@ def main():
         disease_info, treatment_info = load_disease_data()
     
     # Main content tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["📸 Image Upload", "📹 Live Camera", "📊 Analysis", "ℹ️ About"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📸 Image Upload", "📹 Live Camera", "🧠 Frame Predictions", "📊 Analysis", "ℹ️ About"])
     
     with tab1:
         st.markdown("### 📸 Upload Plant Image")
@@ -241,7 +241,7 @@ def main():
         if uploaded_file is not None:
             # Display uploaded image
             image = Image.open(uploaded_file)
-            st.image(image, caption="Uploaded Image", use_container_width=True)
+            st.image(image, caption="Uploaded Image", width='stretch')
             
             # Image information
             with st.expander("📋 Image Information"):
@@ -291,45 +291,354 @@ def main():
     with tab2:
         st.markdown("### 📹 Live Camera Analysis")
         
+        # Initialize camera handler in session state
+        if 'camera_handler' not in st.session_state:
+            st.session_state.camera_handler = None
+        if 'camera_started' not in st.session_state:
+            st.session_state.camera_started = False
+        if 'last_prediction' not in st.session_state:
+            st.session_state.last_prediction = None
+        if 'prediction_history' not in st.session_state:
+            st.session_state.prediction_history = []
+        if 'async_prediction_started' not in st.session_state:
+            st.session_state.async_prediction_started = False
+        if 'captured_frames' not in st.session_state:
+            st.session_state.captured_frames = []
+        if 'frame_predictions' not in st.session_state:
+            st.session_state.frame_predictions = []
+        
         # Camera controls
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         
         with col1:
-            if st.button("🎥 Start Camera", type="primary"):
-                st.session_state.camera_started = True
-                st.success("Camera started! (Note: This is a placeholder for camera functionality)")
+            if st.button("🎥 Start Camera", type="primary", disabled=st.session_state.camera_started):
+                try:
+                    # Create camera handler
+                    st.session_state.camera_handler = create_camera_handler(frame_sample_rate)
+                    
+                    # Start camera
+                    if st.session_state.camera_handler.start_camera():
+                        st.session_state.camera_started = True
+                        
+                        # Clear previous captured frames
+                        st.session_state.captured_frames = []
+                        st.session_state.frame_predictions = []
+                        
+                        st.success("✅ Camera started successfully!")
+                        st.rerun()  # Force rerun to start continuous display
+                    else:
+                        st.error("❌ Failed to start camera. Please check if camera is available and not being used by another application.")
+                except Exception as e:
+                    st.error(f"❌ Error starting camera: {str(e)}")
         
         with col2:
-            if st.button("⏹️ Stop Camera"):
-                st.session_state.camera_started = False
-                st.info("Camera stopped")
+            if st.button("⏹️ Stop Camera", disabled=not st.session_state.camera_started):
+                try:
+                    # Process captured frames for predictions automatically BEFORE stopping camera
+                    if st.session_state.captured_frames:
+                        st.info(f"🔍 Processing {len(st.session_state.captured_frames)} captured frames...")
+                        
+                        # Process frames immediately
+                        try:
+                            # Load model
+                            model = load_model(model_path)
+                            
+                            # Process each captured frame with progress
+                            progress_bar = st.progress(0)
+                            status_text = st.empty()
+                            
+                            for i, frame_data in enumerate(st.session_state.captured_frames):
+                                status_text.text(f"Processing frame {i+1}/{len(st.session_state.captured_frames)}...")
+                                
+                                # Preprocess frame using the camera handler (still available)
+                                processed_frame = st.session_state.camera_handler.preprocess_frame(frame_data['frame'])
+                                
+                                # Make prediction
+                                prediction_result = predict_disease_cached(model, processed_frame)
+                                
+                                # Store prediction
+                                st.session_state.frame_predictions.append({
+                                    'frame_number': frame_data['frame_number'],
+                                    'timestamp': frame_data['timestamp'],
+                                    'prediction': prediction_result,
+                                    'frame': frame_data['frame']
+                                })
+                                
+                                # Update progress
+                                progress_bar.progress((i + 1) / len(st.session_state.captured_frames))
+                            
+                            status_text.text("✅ Processing complete!")
+                            st.success(f"✅ Processed {len(st.session_state.frame_predictions)} frames automatically!")
+                            
+                        except Exception as e:
+                            st.error(f"❌ Auto-processing error: {str(e)}")
+                    else:
+                        st.warning("⚠️ No frames captured for prediction")
+                    
+                    # Now stop the camera
+                    if st.session_state.camera_handler:
+                        st.session_state.camera_handler.stop_camera()
+                    st.session_state.camera_started = False
+                    st.session_state.async_prediction_started = False
+                    st.session_state.camera_handler = None
+                    st.info("🛑 Camera stopped")
+                    
+                except Exception as e:
+                    st.error(f"❌ Error stopping camera: {str(e)}")
         
-        # Camera status
-        if hasattr(st.session_state, 'camera_started') and st.session_state.camera_started:
+        with col3:
+            if st.button("🔄 Reset", disabled=not st.session_state.camera_started):
+                st.session_state.last_prediction = None
+                st.session_state.prediction_history = []
+                st.success("🔄 Camera reset")
+        
+        # Camera status and live feed
+        if st.session_state.camera_started and st.session_state.camera_handler:
             st.info("🟢 Camera is running")
             
-            # Placeholder for camera feed
-            st.markdown("""
-            <div style="background-color: #f0f0f0; padding: 2rem; text-align: center; border-radius: 10px;">
-                <h3>📹 Camera Feed</h3>
-                <p>Live camera functionality will be implemented here</p>
-                <p>Frame Sample Rate: Every {frame_sample_rate} frames</p>
-            </div>
-            """.format(frame_sample_rate=frame_sample_rate), unsafe_allow_html=True)
+            # Get camera info
+            camera_info = st.session_state.camera_handler.get_camera_info()
             
-            # Performance metrics placeholder
-            with st.expander("📊 Performance Metrics"):
+            # Debug information
+            with st.expander("🔍 Debug Information"):
+                st.write(f"Camera Status: {camera_info.get('status', 'Unknown')}")
+                st.write(f"Frame Count: {camera_info.get('frame_count', 0)}")
+                st.write(f"Camera Running: {st.session_state.camera_handler.is_running}")
+                st.write(f"Camera Object: {st.session_state.camera_handler.camera is not None}")
+                
+                # Manual test button
+                if st.button("🧪 Test Camera Capture"):
+                    try:
+                        test_frame = st.session_state.camera_handler.capture_frame()
+                        if test_frame is not None:
+                            st.success("✅ Camera capture successful!")
+                            st.write(f"Frame shape: {test_frame.shape}")
+                            st.image(test_frame, caption="Test Frame", width=300)
+                        else:
+                            st.error("❌ Camera capture failed")
+                    except Exception as e:
+                        st.error(f"❌ Camera test error: {str(e)}")
+            
+            # Live camera feed
+            st.markdown("### 📹 Live Camera Feed")
+            
+            # Create placeholder for camera feed
+            camera_placeholder = st.empty()
+            
+            # Continuous camera feed display
+            try:
+                # Capture a new frame from camera
+                frame = st.session_state.camera_handler.capture_frame()
+                
+                if frame is not None:
+                    # Display current frame
+                    camera_placeholder.image(frame, caption="Live Camera Feed", width='stretch')
+                    st.success(f"✅ Camera feed active - Frame {st.session_state.camera_handler.frame_count}")
+                    
+                    # Store frames for later prediction (every 5th frame)
+                    if st.session_state.camera_handler.should_process_frame():
+                        import time
+                        st.session_state.captured_frames.append({
+                            'frame': frame.copy(),
+                            'frame_number': st.session_state.camera_handler.frame_count,
+                            'timestamp': time.time()
+                        })
+                        st.info(f"📸 Frame {st.session_state.camera_handler.frame_count} captured for prediction")
+                    
+                    # Auto-refresh for continuous feed
+                    import time
+                    time.sleep(0.1)
+                    st.rerun()
+                else:
+                    camera_placeholder.warning("⚠️ No camera feed available")
+                    st.error("❌ Failed to capture frame from camera")
+                    
+                    # Try to restart camera
+                    st.warning("🔄 Attempting to restart camera...")
+                    if st.button("🔄 Restart Camera"):
+                        st.session_state.camera_handler.stop_camera()
+                        if st.session_state.camera_handler.start_camera():
+                            st.success("✅ Camera restarted successfully!")
+                            st.rerun()
+                        else:
+                            st.error("❌ Failed to restart camera")
+                    
+            except Exception as e:
+                st.error(f"❌ Camera error: {str(e)}")
+                st.session_state.camera_started = False
+            
+            # Frame capture status
+            st.markdown("#### 📸 Frame Capture Status")
+            
+            if st.session_state.captured_frames:
+                st.success(f"✅ {len(st.session_state.captured_frames)} frames captured for prediction")
+                
+                # Show captured frames info
+                with st.expander("📋 Captured Frames Details"):
+                    for i, frame_data in enumerate(st.session_state.captured_frames):
+                        st.write(f"Frame {i+1}: #{frame_data['frame_number']} - {frame_data['timestamp']:.2f}s")
+            else:
+                st.info("⏳ No frames captured yet (capturing every 5th frame)")
+            
+            # Automatic capture status
+            st.info("📸 Frames are captured automatically every 5th frame while camera is running")
+            
+            # Performance metrics
+            st.markdown("#### 📊 Performance Metrics")
+            
+            if st.session_state.camera_handler:
+                metrics = st.session_state.camera_handler.get_performance_metrics()
+                
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    st.metric("FPS", "0.0")
+                    st.metric("FPS", f"{metrics['fps']:.1f}")
+                    st.metric("Processing Time", f"{metrics['processing_time']:.3f}s")
                 with col2:
-                    st.metric("Processing Time", "0.0s")
+                    st.metric("Memory Usage", f"{metrics['memory_usage']:.1f} MB")
+                    st.metric("Frame Drop Rate", f"{metrics['frame_drop_rate']:.1%}")
                 with col3:
-                    st.metric("Memory Usage", "0.0 MB")
+                    st.metric("Frame Count", camera_info.get('frame_count', 0))
+                    st.metric("Sample Rate", f"Every {camera_info.get('sample_rate', 5)} frames")
+            
+            # Prediction history
+            if st.session_state.prediction_history:
+                with st.expander("📈 Prediction History"):
+                    for i, pred in enumerate(reversed(st.session_state.prediction_history[-5:])):  # Show last 5
+                        if pred.get("processed", False):
+                            primary = pred["prediction"]["top_predictions"][0]
+                            st.markdown(f"""
+                            **{i+1}.** {primary['plant']} - {primary['disease']} 
+                            ({primary['confidence_percentage']}%) - {pred['prediction']['severity']}
+                            """)
+            
+            # Export predictions
+            if st.session_state.prediction_history:
+                if st.button("📥 Export Predictions"):
+                    try:
+                        from utils.camera_handler import save_prediction_log
+                        filename = save_prediction_log(st.session_state.prediction_history)
+                        st.success(f"✅ Predictions exported to {filename}")
+                    except Exception as e:
+                        st.error(f"❌ Export error: {str(e)}")
+        
         else:
             st.info("🔴 Camera is not running")
+            
+            # Show available cameras
+            with st.expander("📷 Available Cameras"):
+                try:
+                    available_cameras = get_available_cameras()
+                    if available_cameras:
+                        st.success(f"✅ Found {len(available_cameras)} camera(s): {available_cameras}")
+                        st.info("💡 If camera detection fails, try:")
+                        st.markdown("""
+                        - Close other applications using the camera (Zoom, Teams, etc.)
+                        - Check if camera permissions are granted
+                        - Try restarting the application
+                        - On Windows: Check Device Manager for camera issues
+                        """)
+                    else:
+                        st.warning("⚠️ No cameras detected")
+                        st.error("""
+                        **Troubleshooting Steps:**
+                        1. Check if camera is connected and working
+                        2. Close other applications using the camera
+                        3. Check camera permissions in system settings
+                        4. Try restarting your computer
+                        """)
+                except Exception as e:
+                    st.error(f"❌ Camera detection error: {str(e)}")
+            
+            # Instructions
+            st.markdown("""
+            ### 📋 How to Use Live Camera Analysis
+            
+            1. **Start Camera**: Click "🎥 Start Camera" to begin live feed
+            2. **Enable Analysis**: Check "🔍 Enable Real-time Analysis" for predictions
+            3. **Frame Sampling**: Camera processes every {frame_sample_rate} frames for performance
+            4. **View Results**: See live predictions with confidence scores
+            5. **Monitor Performance**: Check FPS and processing metrics
+            6. **Export Data**: Save prediction history for analysis
+            
+            **💡 Tips:**
+            - Ensure good lighting for better predictions
+            - Keep the plant leaf in focus
+            - Results update automatically as you move the camera
+            - Higher frame sample rates = better performance, lower accuracy
+            """.format(frame_sample_rate=frame_sample_rate))
     
     with tab3:
+        st.markdown("### 🧠 Frame Predictions")
+        
+        if st.session_state.frame_predictions:
+            st.success(f"✅ {len(st.session_state.frame_predictions)} frames already processed automatically!")
+            
+            # Show processing status
+            st.info("🎉 Frames were processed automatically when camera was stopped")
+            
+            # Display predictions
+            if st.session_state.frame_predictions:
+                st.markdown("#### 📊 Prediction Results")
+                
+                for i, pred_data in enumerate(st.session_state.frame_predictions):
+                    with st.expander(f"Frame {i+1} - #{pred_data['frame_number']}"):
+                        # Display frame
+                        st.image(pred_data['frame'], caption=f"Frame {pred_data['frame_number']}", width=300)
+                        
+                        # Display prediction
+                        primary = pred_data['prediction']['top_predictions'][0]
+                        confidence = pred_data['prediction']['confidence_metrics']
+                        
+                        st.markdown(f"""
+                        <div class="prediction-card">
+                            <h4>🔍 Prediction Result</h4>
+                            <h3>{primary['plant']} - {primary['disease']}</h3>
+                            <p><strong>Confidence:</strong> {primary['confidence_percentage']}%</p>
+                            <p><strong>Severity:</strong> {pred_data['prediction']['severity']}</p>
+                            <p><strong>Healthy:</strong> {'✅ Yes' if pred_data['prediction']['is_healthy'] else '❌ No'}</p>
+                            <p><strong>Processing Time:</strong> {pred_data['prediction']['processing_time']:.3f}s</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        
+                        # Show disease information
+                        display_disease_information(
+                            primary['plant'], 
+                            primary['disease'], 
+                            disease_info, 
+                            treatment_info
+                        )
+            
+            # Clear predictions button
+            if st.button("🗑️ Clear All Predictions"):
+                st.session_state.frame_predictions = []
+                st.session_state.captured_frames = []
+                st.success("✅ All predictions cleared!")
+                st.rerun()
+                
+        elif st.session_state.captured_frames:
+            st.warning(f"📸 {len(st.session_state.captured_frames)} frames captured but not yet processed")
+            st.info("💡 Stop the camera to automatically process all captured frames")
+            
+        else:
+            st.info("📸 No frames captured yet. Go to 'Live Camera' tab to capture frames.")
+            
+            # Instructions
+            st.markdown("""
+            ### 📋 How to Use Frame Predictions
+            
+            1. **Start Camera**: Go to 'Live Camera' tab and start the camera
+            2. **Capture Frames**: Camera automatically captures every 5th frame
+            3. **Stop Camera**: Click 'Stop Camera' when done (frames processed automatically)
+            4. **View Results**: See predictions for each captured frame
+            
+            **💡 Tips:**
+            - Capture multiple frames for better analysis
+            - Each frame is processed independently
+            - Results are stored until you clear them
+            - Processing happens automatically when you stop the camera
+            """)
+
+    with tab4:
         st.markdown("### 📊 Analysis Dashboard")
         
         # Model information
@@ -379,7 +688,7 @@ def main():
             - **Supported Formats**: JPG, PNG, JPEG
             """)
     
-    with tab4:
+    with tab5:
         st.markdown("### ℹ️ About This Application")
         
         st.markdown("""

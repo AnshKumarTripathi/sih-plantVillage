@@ -8,6 +8,7 @@ import numpy as np
 import streamlit as st
 import logging
 import time
+import threading
 from typing import Optional, Dict, List, Callable
 from queue import Queue
 import json
@@ -37,13 +38,35 @@ class CameraHandler:
         self.prediction_history = []
         self.max_history_size = 10
         
+        # New attributes for continuous feed and async processing
+        self.current_frame = None
+        self.latest_prediction = None
+        self.prediction_thread = None
+        self.prediction_queue = Queue()
+        self.is_processing_prediction = False
+        self.last_frame_time = 0
+        self.frame_lock = threading.Lock()
+        
     def start_camera(self, camera_index: int = 0) -> bool:
         """Start camera capture."""
         try:
-            self.camera = cv2.VideoCapture(camera_index)
+            # Try to find an available camera
+            available_cameras = self._find_available_cameras()
+            if not available_cameras:
+                logger.error("No cameras found")
+                return False
+            
+            # Use the first available camera or the specified index
+            if camera_index in available_cameras:
+                selected_camera = camera_index
+            else:
+                selected_camera = available_cameras[0]
+                logger.info(f"Camera {camera_index} not available, using camera {selected_camera}")
+            
+            self.camera = cv2.VideoCapture(selected_camera)
             
             if not self.camera.isOpened():
-                logger.error(f"Failed to open camera {camera_index}")
+                logger.error(f"Failed to open camera {selected_camera}")
                 return False
             
             # Set camera properties
@@ -51,22 +74,59 @@ class CameraHandler:
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
             self.camera.set(cv2.CAP_PROP_FPS, self.max_fps)
             
+            # Test if camera actually works by capturing a frame
+            ret, test_frame = self.camera.read()
+            if not ret or test_frame is None:
+                logger.error("Camera opened but cannot capture frames")
+                self.camera.release()
+                self.camera = None
+                return False
+            
             self.is_running = True
-            logger.info(f"Camera {camera_index} started successfully")
+            logger.info(f"Camera {selected_camera} started successfully")
             return True
             
         except Exception as e:
             logger.error(f"Error starting camera: {str(e)}")
             return False
     
+    def _find_available_cameras(self) -> List[int]:
+        """Find available camera indices."""
+        available_cameras = []
+        
+        # Test cameras 0-5
+        for i in range(6):
+            try:
+                cap = cv2.VideoCapture(i)
+                if cap.isOpened():
+                    # Test if we can actually read from it
+                    ret, frame = cap.read()
+                    if ret and frame is not None:
+                        available_cameras.append(i)
+                    cap.release()
+            except Exception:
+                continue
+        
+        logger.info(f"Available cameras: {available_cameras}")
+        return available_cameras
+    
     def stop_camera(self):
         """Stop camera capture and release resources."""
         try:
             self.is_running = False
             
+            # Stop prediction thread if running
+            if self.prediction_thread and self.prediction_thread.is_alive():
+                self.prediction_thread.join(timeout=1.0)
+            
             if self.camera:
                 self.camera.release()
                 self.camera = None
+            
+            # Clear current frame and prediction
+            with self.frame_lock:
+                self.current_frame = None
+                self.latest_prediction = None
             
             logger.info("Camera stopped and resources released")
             
@@ -74,7 +134,7 @@ class CameraHandler:
             logger.error(f"Error stopping camera: {str(e)}")
     
     def capture_frame(self) -> Optional[np.ndarray]:
-        """Capture a single frame from camera."""
+        """Capture a single frame from camera and update current frame."""
         try:
             if not self.camera or not self.is_running:
                 return None
@@ -86,18 +146,95 @@ class CameraHandler:
                 return None
             
             self.frame_count += 1
+            
+            # Update current frame for continuous display
+            with self.frame_lock:
+                self.current_frame = frame.copy()
+                self.last_frame_time = time.time()
+            
             return frame
             
         except Exception as e:
             logger.error(f"Error capturing frame: {str(e)}")
             return None
     
+    def get_current_frame(self) -> Optional[np.ndarray]:
+        """Get the current frame for continuous display."""
+        with self.frame_lock:
+            return self.current_frame.copy() if self.current_frame is not None else None
+    
     def should_process_frame(self) -> bool:
         """Determine if current frame should be processed based on sampling rate."""
         return self.frame_count % self.frame_sample_rate == 0
     
+    def start_async_prediction_processing(self, prediction_callback: Callable):
+        """Start async prediction processing thread."""
+        if self.prediction_thread and self.prediction_thread.is_alive():
+            return  # Already running
+        
+        self.prediction_thread = threading.Thread(
+            target=self._async_prediction_worker,
+            args=(prediction_callback,),
+            daemon=True
+        )
+        self.prediction_thread.start()
+        logger.info("Async prediction processing started")
+    
+    def _async_prediction_worker(self, prediction_callback: Callable):
+        """Worker thread for async prediction processing."""
+        while self.is_running:
+            try:
+                # Check if we should process a frame
+                if self.should_process_frame() and not self.is_processing_prediction:
+                    with self.frame_lock:
+                        if self.current_frame is not None:
+                            frame = self.current_frame.copy()
+                        else:
+                            time.sleep(0.1)
+                            continue
+                    
+                    self.is_processing_prediction = True
+                    
+                    try:
+                        # Preprocess frame for prediction
+                        processed_frame = self.preprocess_frame(frame)
+                        
+                        # Make prediction
+                        prediction_results = prediction_callback(processed_frame)
+                        
+                        # Update latest prediction
+                        with self.frame_lock:
+                            self.latest_prediction = prediction_results
+                        
+                        # Update metrics
+                        self.update_performance_metrics(0.1)  # Approximate processing time
+                        
+                        # Store prediction in history
+                        self.add_to_prediction_history(prediction_results)
+                        
+                        self.processed_frames += 1
+                        self.last_prediction_time = time.time()
+                        
+                        logger.info(f"Async prediction completed for frame {self.frame_count}")
+                        
+                    except Exception as e:
+                        logger.error(f"Error in async prediction: {str(e)}")
+                    finally:
+                        self.is_processing_prediction = False
+                
+                time.sleep(0.1)  # Small delay to prevent excessive CPU usage
+                
+            except Exception as e:
+                logger.error(f"Error in prediction worker: {str(e)}")
+                time.sleep(0.5)
+    
+    def get_latest_prediction(self) -> Optional[Dict]:
+        """Get the latest prediction result."""
+        with self.frame_lock:
+            return self.latest_prediction.copy() if self.latest_prediction is not None else None
+    
     def process_frame_realtime(self, frame: np.ndarray, prediction_callback: Callable) -> Dict:
-        """Process frame for real-time prediction."""
+        """Process frame for real-time prediction (legacy method for compatibility)."""
         try:
             start_time = time.time()
             
