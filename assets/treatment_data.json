@@ -1,0 +1,346 @@
+{
+  "treatments": {
+    "Apple___Apple_scab": {
+      "immediate": "Remove affected leaves and apply fungicide immediately",
+      "prevention": "Ensure good air circulation, avoid overhead watering, and prune regularly",
+      "chemical": "Copper-based fungicides (copper hydroxide, copper oxychloride)",
+      "organic": "Neem oil spray or baking soda solution (1 tsp per liter water)",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at bud break and continue every 7-10 days during wet weather",
+      "pesticide_types": "Copper fungicides, sulfur-based fungicides, or systemic fungicides like myclobutanil"
+    },
+    "Apple___Black_rot": {
+      "immediate": "Remove infected fruit and cankered branches immediately",
+      "prevention": "Remove fallen fruit, maintain tree hygiene, and ensure proper spacing",
+      "chemical": "Copper fungicides or captan-based treatments",
+      "organic": "Baking soda spray or copper soap fungicide",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at petal fall and continue every 10-14 days until harvest",
+      "pesticide_types": "Copper fungicides, captan, or systemic fungicides like tebuconazole"
+    },
+    "Apple___Cedar_apple_rust": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Remove nearby cedar trees if possible, maintain good air circulation",
+      "chemical": "Copper fungicides or myclobutanil",
+      "organic": "Copper soap fungicide or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at bud break and continue every 7-10 days during spring",
+      "pesticide_types": "Copper fungicides, myclobutanil, or propiconazole"
+    },
+    "Apple___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain regular watering, fertilization, and pruning schedule",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Blueberry___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain acidic soil pH (4.5-5.5), regular watering, and mulching",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Cherry_(including_sour)___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain regular watering, pruning, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Cherry_(including_sour)___Powdery_mildew": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Ensure good air circulation, avoid overhead watering, and maintain proper spacing",
+      "chemical": "Sulfur-based fungicides or myclobutanil",
+      "organic": "Baking soda spray or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Sulfur fungicides, myclobutanil, or potassium bicarbonate"
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-14 days",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Corn_(maize)___Common_rust_": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Plant rust-resistant varieties and maintain proper spacing",
+      "chemical": "Chlorothalonil or tebuconazole fungicides",
+      "organic": "Copper fungicides or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Chlorothalonil, tebuconazole, or azoxystrobin"
+    },
+    "Corn_(maize)___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper spacing, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-14 days",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Grape___Black_rot": {
+      "immediate": "Remove infected fruit and canes immediately",
+      "prevention": "Remove fallen fruit, maintain good air circulation, and prune regularly",
+      "chemical": "Copper fungicides or captan-based treatments",
+      "organic": "Copper soap fungicide or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at bud break and continue every 7-10 days during wet weather",
+      "pesticide_types": "Copper fungicides, captan, or systemic fungicides like myclobutanil"
+    },
+    "Grape___Esca_(Black_Measles)": {
+      "immediate": "Remove infected canes and apply fungicide",
+      "prevention": "Maintain good air circulation, avoid wounding, and use clean pruning tools",
+      "chemical": "Copper fungicides or systemic fungicides",
+      "organic": "Copper soap fungicide or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide after pruning and continue every 14-21 days",
+      "pesticide_types": "Copper fungicides, systemic fungicides, or biological control agents"
+    },
+    "Grape___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper pruning, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and prune regularly",
+      "chemical": "Copper fungicides or chlorothalonil",
+      "organic": "Copper soap fungicide or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Copper fungicides, chlorothalonil, or systemic fungicides"
+    },
+    "Orange___Haunglongbing_(Citrus_greening)": {
+      "immediate": "Remove infected trees immediately to prevent spread",
+      "prevention": "Control psyllid vectors, use disease-free planting material, and maintain tree health",
+      "chemical": "Insecticides for psyllid control (not curable with fungicides)",
+      "organic": "Biological control of psyllids, but disease cannot be cured organically",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply insecticides for psyllid control every 2-3 weeks during growing season",
+      "pesticide_types": "Systemic insecticides like imidacloprid or pyrethroids for psyllid control"
+    },
+    "Peach___Bacterial_spot": {
+      "immediate": "Remove infected leaves and apply copper fungicide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and use disease-resistant varieties",
+      "chemical": "Copper fungicides or streptomycin",
+      "organic": "Copper soap fungicide or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply copper fungicide at bud break and continue every 7-10 days during wet weather",
+      "pesticide_types": "Copper fungicides, streptomycin, or biological control agents"
+    },
+    "Peach___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain regular watering, pruning, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Pepper,_bell___Bacterial_spot": {
+      "immediate": "Remove infected leaves and apply copper fungicide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and use disease-free seeds",
+      "chemical": "Copper fungicides or streptomycin",
+      "organic": "Copper soap fungicide or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply copper fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Copper fungicides, streptomycin, or biological control agents"
+    },
+    "Pepper,_bell___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain regular watering, proper spacing, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Potato___Early_blight": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-14 days",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Potato___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper spacing, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Potato___Late_blight": {
+      "immediate": "Remove infected plants immediately and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 5-7 days during wet weather",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Raspberry___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper pruning, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Soybean___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper spacing, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Squash___Powdery_mildew": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Ensure good air circulation, avoid overhead watering, and maintain proper spacing",
+      "chemical": "Sulfur-based fungicides or myclobutanil",
+      "organic": "Baking soda spray or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Sulfur fungicides, myclobutanil, or potassium bicarbonate"
+    },
+    "Strawberry___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper spacing, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Strawberry___Leaf_scorch": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and use disease-free plants",
+      "chemical": "Copper fungicides or chlorothalonil",
+      "organic": "Copper soap fungicide or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Copper fungicides, chlorothalonil, or systemic fungicides"
+    },
+    "Tomato___Bacterial_spot": {
+      "immediate": "Remove infected leaves and apply copper fungicide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and use disease-free seeds",
+      "chemical": "Copper fungicides or streptomycin",
+      "organic": "Copper soap fungicide or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply copper fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Copper fungicides, streptomycin, or biological control agents"
+    },
+    "Tomato___Early_blight": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-14 days",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Tomato___healthy": {
+      "immediate": "Continue current care practices",
+      "prevention": "Maintain proper spacing, regular watering, and soil nutrition",
+      "chemical": "No chemical treatment needed",
+      "organic": "Continue organic care practices",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides needed for healthy plants",
+      "pesticide_types": "None required"
+    },
+    "Tomato___Late_blight": {
+      "immediate": "Remove infected plants immediately and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 5-7 days during wet weather",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Tomato___Leaf_Mold": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and maintain proper spacing",
+      "chemical": "Chlorothalonil or myclobutanil fungicides",
+      "organic": "Copper soap fungicide or neem oil",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-10 days",
+      "pesticide_types": "Chlorothalonil, myclobutanil, or systemic fungicides"
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-14 days",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Tomato___Spider_mites Two-spotted_spider_mite": {
+      "immediate": "Remove infected leaves and apply miticide",
+      "prevention": "Maintain good air circulation, avoid overhead watering, and use beneficial insects",
+      "chemical": "Miticides like abamectin or spiromesifen",
+      "organic": "Neem oil, insecticidal soap, or beneficial insects",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply miticide at first sign of infestation and repeat every 7-10 days",
+      "pesticide_types": "Miticides like abamectin, spiromesifen, or pyrethroids"
+    },
+    "Tomato___Target_Spot": {
+      "immediate": "Remove infected leaves and apply fungicide",
+      "prevention": "Crop rotation, proper spacing, and avoid overhead irrigation",
+      "chemical": "Chlorothalonil or azoxystrobin fungicides",
+      "organic": "Copper fungicides or biological control agents",
+      "pesticide_required": true,
+      "pesticide_timing": "Apply fungicide at first sign of disease and repeat every 7-14 days",
+      "pesticide_types": "Chlorothalonil, azoxystrobin, or propiconazole"
+    },
+    "Tomato___Tomato_mosaic_virus": {
+      "immediate": "Remove infected plants immediately to prevent spread",
+      "prevention": "Use disease-free seeds, control aphid vectors, and maintain good hygiene",
+      "chemical": "No chemical treatment available - virus cannot be cured with pesticides",
+      "organic": "No organic treatment available - virus cannot be cured organically",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides can cure viral diseases - focus on prevention and vector control",
+      "pesticide_types": "No pesticides can cure viral diseases - use insecticides for vector control only"
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "immediate": "Remove infected plants immediately to prevent spread",
+      "prevention": "Use disease-free seeds, control whitefly vectors, and maintain good hygiene",
+      "chemical": "No chemical treatment available - virus cannot be cured with pesticides",
+      "organic": "No organic treatment available - virus cannot be cured organically",
+      "pesticide_required": false,
+      "pesticide_timing": "No pesticides can cure viral diseases - focus on prevention and vector control",
+      "pesticide_types": "No pesticides can cure viral diseases - use insecticides for vector control only"
+    }
+  }
+}

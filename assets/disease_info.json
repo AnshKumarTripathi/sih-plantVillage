@@ -1,0 +1,270 @@
+{
+  "diseases": {
+    "Apple___Apple_scab": {
+      "name": "Apple Scab",
+      "description": "A fungal disease caused by Venturia inaequalis that affects apple trees",
+      "symptoms": ["Dark olive-green spots on leaves", "Cracked and deformed fruit", "Premature leaf drop"],
+      "severity": "High",
+      "season": "Spring to Fall"
+    },
+    "Apple___Black_rot": {
+      "name": "Black Rot",
+      "description": "A fungal disease caused by Botryosphaeria obtusa affecting apple trees",
+      "symptoms": ["Brown lesions on leaves", "Black cankers on branches", "Rotted fruit"],
+      "severity": "High",
+      "season": "Summer to Fall"
+    },
+    "Apple___Cedar_apple_rust": {
+      "name": "Cedar Apple Rust",
+      "description": "A fungal disease caused by Gymnosporangium juniperi-virginianae",
+      "symptoms": ["Yellow-orange spots on leaves", "Galls on cedar trees", "Premature defoliation"],
+      "severity": "Medium",
+      "season": "Spring"
+    },
+    "Apple___healthy": {
+      "name": "Healthy Apple",
+      "description": "A healthy apple tree with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal fruit development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Blueberry___healthy": {
+      "name": "Healthy Blueberry",
+      "description": "A healthy blueberry plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal berry development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Cherry_(including_sour)___healthy": {
+      "name": "Healthy Cherry",
+      "description": "A healthy cherry tree with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal fruit development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Cherry_(including_sour)___Powdery_mildew": {
+      "name": "Powdery Mildew",
+      "description": "A fungal disease caused by Podosphaera clandestina affecting cherry trees",
+      "symptoms": ["White powdery coating on leaves", "Stunted growth", "Distorted leaves"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+      "name": "Gray Leaf Spot",
+      "description": "A fungal disease caused by Cercospora zeae-maydis affecting corn",
+      "symptoms": ["Gray rectangular lesions on leaves", "Yellowing of leaves", "Reduced yield"],
+      "severity": "High",
+      "season": "Summer to Fall"
+    },
+    "Corn_(maize)___Common_rust_": {
+      "name": "Common Rust",
+      "description": "A fungal disease caused by Puccinia sorghi affecting corn",
+      "symptoms": ["Orange-brown pustules on leaves", "Yellowing of leaves", "Reduced photosynthesis"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Corn_(maize)___healthy": {
+      "name": "Healthy Corn",
+      "description": "A healthy corn plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal ear development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+      "name": "Northern Leaf Blight",
+      "description": "A fungal disease caused by Exserohilum turcicum affecting corn",
+      "symptoms": ["Large tan lesions on leaves", "Yellowing and death of leaves", "Reduced yield"],
+      "severity": "High",
+      "season": "Summer to Fall"
+    },
+    "Grape___Black_rot": {
+      "name": "Black Rot",
+      "description": "A fungal disease caused by Guignardia bidwellii affecting grapes",
+      "symptoms": ["Brown spots on leaves", "Black, shriveled berries", "Cankers on canes"],
+      "severity": "High",
+      "season": "Spring to Fall"
+    },
+    "Grape___Esca_(Black_Measles)": {
+      "name": "Esca (Black Measles)",
+      "description": "A fungal disease caused by Phaeomoniella chlamydospora affecting grapevines",
+      "symptoms": ["Dark spots on leaves", "Wood decay", "Reduced vine vigor"],
+      "severity": "High",
+      "season": "Year-round"
+    },
+    "Grape___healthy": {
+      "name": "Healthy Grape",
+      "description": "A healthy grapevine with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal berry development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+      "name": "Leaf Blight",
+      "description": "A fungal disease caused by Isariopsis griseola affecting grapevines",
+      "symptoms": ["Brown spots on leaves", "Yellowing of leaves", "Premature defoliation"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Orange___Haunglongbing_(Citrus_greening)": {
+      "name": "Citrus Greening (Huanglongbing)",
+      "description": "A bacterial disease caused by Candidatus Liberibacter asiaticus affecting citrus",
+      "symptoms": ["Yellowing of leaves", "Small, misshapen fruit", "Tree decline"],
+      "severity": "Critical",
+      "season": "Year-round"
+    },
+    "Peach___Bacterial_spot": {
+      "name": "Bacterial Spot",
+      "description": "A bacterial disease caused by Xanthomonas arboricola affecting peach trees",
+      "symptoms": ["Small dark spots on leaves", "Cracked fruit", "Premature defoliation"],
+      "severity": "High",
+      "season": "Spring to Fall"
+    },
+    "Peach___healthy": {
+      "name": "Healthy Peach",
+      "description": "A healthy peach tree with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal fruit development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Pepper,_bell___Bacterial_spot": {
+      "name": "Bacterial Spot",
+      "description": "A bacterial disease caused by Xanthomonas spp. affecting pepper plants",
+      "symptoms": ["Small dark spots on leaves", "Cracked fruit", "Stunted growth"],
+      "severity": "High",
+      "season": "Spring to Fall"
+    },
+    "Pepper,_bell___healthy": {
+      "name": "Healthy Pepper",
+      "description": "A healthy pepper plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal fruit development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Potato___Early_blight": {
+      "name": "Early Blight",
+      "description": "A fungal disease caused by Alternaria solani affecting potato plants",
+      "symptoms": ["Dark spots with concentric rings", "Yellowing of leaves", "Reduced yield"],
+      "severity": "High",
+      "season": "Summer to Fall"
+    },
+    "Potato___healthy": {
+      "name": "Healthy Potato",
+      "description": "A healthy potato plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal tuber development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Potato___Late_blight": {
+      "name": "Late Blight",
+      "description": "A fungal disease caused by Phytophthora infestans affecting potato plants",
+      "symptoms": ["Water-soaked lesions", "White mold on leaves", "Rotted tubers"],
+      "severity": "Critical",
+      "season": "Summer to Fall"
+    },
+    "Raspberry___healthy": {
+      "name": "Healthy Raspberry",
+      "description": "A healthy raspberry plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal berry development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Soybean___healthy": {
+      "name": "Healthy Soybean",
+      "description": "A healthy soybean plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal pod development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Squash___Powdery_mildew": {
+      "name": "Powdery Mildew",
+      "description": "A fungal disease caused by Podosphaera xanthii affecting squash plants",
+      "symptoms": ["White powdery coating on leaves", "Stunted growth", "Reduced yield"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Strawberry___healthy": {
+      "name": "Healthy Strawberry",
+      "description": "A healthy strawberry plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal berry development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Strawberry___Leaf_scorch": {
+      "name": "Leaf Scorch",
+      "description": "A fungal disease caused by Diplocarpon earlianum affecting strawberry plants",
+      "symptoms": ["Purple spots on leaves", "Yellowing of leaves", "Reduced yield"],
+      "severity": "Medium",
+      "season": "Spring to Fall"
+    },
+    "Tomato___Bacterial_spot": {
+      "name": "Bacterial Spot",
+      "description": "A bacterial disease caused by Xanthomonas spp. affecting tomato plants",
+      "symptoms": ["Small dark spots on leaves", "Cracked fruit", "Stunted growth"],
+      "severity": "High",
+      "season": "Spring to Fall"
+    },
+    "Tomato___Early_blight": {
+      "name": "Early Blight",
+      "description": "A fungal disease caused by Alternaria solani affecting tomato plants",
+      "symptoms": ["Dark spots with concentric rings", "Yellowing of leaves", "Reduced yield"],
+      "severity": "High",
+      "season": "Summer to Fall"
+    },
+    "Tomato___healthy": {
+      "name": "Healthy Tomato",
+      "description": "A healthy tomato plant with no visible disease symptoms",
+      "symptoms": ["Green, healthy leaves", "Normal fruit development", "No spots or lesions"],
+      "severity": "None",
+      "season": "Year-round"
+    },
+    "Tomato___Late_blight": {
+      "name": "Late Blight",
+      "description": "A fungal disease caused by Phytophthora infestans affecting tomato plants",
+      "symptoms": ["Water-soaked lesions", "White mold on leaves", "Rotted fruit"],
+      "severity": "Critical",
+      "season": "Summer to Fall"
+    },
+    "Tomato___Leaf_Mold": {
+      "name": "Leaf Mold",
+      "description": "A fungal disease caused by Passalora fulva affecting tomato plants",
+      "symptoms": ["Yellow spots on leaves", "Gray mold on underside", "Premature defoliation"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "name": "Septoria Leaf Spot",
+      "description": "A fungal disease caused by Septoria lycopersici affecting tomato plants",
+      "symptoms": ["Small dark spots on leaves", "Yellowing of leaves", "Premature defoliation"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Tomato___Spider_mites Two-spotted_spider_mite": {
+      "name": "Spider Mites",
+      "description": "A pest infestation caused by Tetranychus urticae affecting tomato plants",
+      "symptoms": ["Fine webbing on leaves", "Yellow stippling", "Leaf drop"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Tomato___Target_Spot": {
+      "name": "Target Spot",
+      "description": "A fungal disease caused by Corynespora cassiicola affecting tomato plants",
+      "symptoms": ["Concentric ring spots", "Yellowing of leaves", "Reduced yield"],
+      "severity": "Medium",
+      "season": "Summer to Fall"
+    },
+    "Tomato___Tomato_mosaic_virus": {
+      "name": "Tomato Mosaic Virus",
+      "description": "A viral disease caused by Tomato mosaic virus affecting tomato plants",
+      "symptoms": ["Mottled leaves", "Stunted growth", "Distorted fruit"],
+      "severity": "High",
+      "season": "Year-round"
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "name": "Tomato Yellow Leaf Curl Virus",
+      "description": "A viral disease caused by Tomato yellow leaf curl virus affecting tomato plants",
+      "symptoms": ["Yellow, curled leaves", "Stunted growth", "Reduced yield"],
+      "severity": "High",
+      "season": "Year-round"
+    }
+  }
+}
