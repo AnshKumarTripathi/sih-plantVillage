@@ -8,7 +8,7 @@ import cv2
 from PIL import Image
 import streamlit as st
 import logging
-from typing import Tuple, Optional, Union
+from typing import Tuple, Optional, Union, Dict
 import io
 
 # Configure logging
